@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" id="themecolor" content="#C44100">
+<title>Antisocial Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- the four weekly schemes ----------
+     Set on <html> as data-scheme. One per week, rotating. */
+  :root {
+    color-scheme: dark;
+    --bg:     #C44100;   /* page */
+    --rule:   #FF9100;   /* hairlines + the brand line */
+    --link:   #FFBA23;   /* MORE, PAST WEEK, SWAP ONE */
+    --dotoff: #842100;   /* not done yet */
+    --doton:  #CEFF00;   /* done */
+    --ink:    #FFFFFF;
+
+    /* every small uppercase label on the page is this one size */
+    --label: 11px;
+  }
+  html[data-scheme="1"] { --bg:#004D8B; --rule:#008DEC; --link:#0DCCFF; --dotoff:#002E3E; --doton:#FF3B00; }
+  html[data-scheme="2"] { --bg:#375E00; --rule:#79B700; --link:#B5FF00; --dotoff:#213300; --doton:#FF39EB; }
+  html[data-scheme="3"] { --bg:#4F2100; --rule:#9B3E00; --link:#FF6700; --dotoff:#220E00; --doton:#00F875; }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); }
+  body {
+    color: var(--ink);
+    font-family: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.35;
+    -webkit-font-smoothing: antialiased;
+    padding: calc(22px + env(safe-area-inset-top)) 26px calc(40px + env(safe-area-inset-bottom));
+    transition: background 400ms ease;
+  }
+  .wrap { width: 100%; max-width: 430px; margin: 0 auto; }
+
+  /* ---------- masthead ---------- */
+  .brand {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--rule);
+  }
+  h1 {
+    margin: 9px 0 0;
+    font-size: clamp(21px, 6.4vw, 25px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+  }
+
+  /* ---------- the seven ----------
+     The hairlines run edge to edge, so the list steps back out of the
+     body padding and each row pays it back. */
+  .list {
+    margin: 47px -26px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 17px;
+    padding: 16px 26px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .dot {
+    flex: 0 0 auto;
+    width: 19px;
+    height: 19px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    background: var(--dotoff);
+    cursor: pointer;
+    transition: background 200ms ease, transform 140ms ease;
+  }
+  .dot:active { transform: scale(0.88); }
+  .row.done .dot { background: var(--doton); }
+  .txt {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .txt em { font-style: italic; }
+  .txt strong { font-weight: 600; }
+  .inl {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  .lnk {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+    text-decoration: none;
+    white-space: nowrap;
+    vertical-align: 1px;
+  }
+  .lnk:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---------- the Monday swap offer ----------
+     Shown until the week is settled, one way or the other. While it is up
+     the rows are swap targets, not checkboxes. */
+  .offer { margin: 18px 0 0; display: none; }
+  .offer.on { display: block; }
+  .offer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+    opacity: 0.9;
+  }
+  .offer button {
+    margin: 12px 0 0;
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 7px 15px;
+    font: inherit;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+    cursor: pointer;
+  }
+  .offer button:hover { border-color: var(--link); }
+  .has-offer .list { margin-top: 26px; }
+
+  /* swap mode: the whole row becomes the target */
+  .arm .row { cursor: pointer; }
+  .arm .row:hover, .arm .row.hot { background: rgba(255,255,255,0.07); }
+  .arm .dot { pointer-events: none; }
+  .row.landed { animation: landed 900ms ease; }
+  @keyframes landed {
+    0%   { background: rgba(255,255,255,0.22); }
+    100% { background: transparent; }
+  }
+
+  /* ---------- footer ---------- */
+  .foot {
+    margin: 21px 0 0;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .foot .when { color: var(--ink); }
+  .foot .when b { font-size: 15px; font-weight: 700; letter-spacing: 0.02em; }
+  .foot .acts {
+    margin-top: 9px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 15px;
+  }
+  .foot button {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: var(--link);
+    cursor: pointer;
+  }
+  .foot button:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .foot button.off { visibility: hidden; }
+  .foot .note { color: var(--ink); opacity: 0.85; }
+  .foot .note button { color: var(--link); margin-left: 10px; }
+
+  /* ---------- past weeks ---------- */
+  .past { display: none; }
+  .past.on { display: block; }
+  .now.off { display: none; }
+  .wk + .wk { margin-top: 34px; }
+  .wk h2 {
+    margin: 0;
+    font-size: clamp(19px, 5.6vw, 22px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+  }
+  .wk .score {
+    margin: 4px 0 0;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--rule);
+  }
+  .wk .list { margin-top: 16px; }
+  .wk .dot { cursor: default; }
+  .empty { margin: 40px 0 0; font-size: 16px; opacity: 0.8; }
+  /* ---------- before launch ---------- */
+  .hold { display: none; }
+  .hold.on { display: block; }
+  .hold h1 { max-width: 15ch; }
+  .holdwhen {
+    margin: 22px 0 0;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+  }
+
+  /* ---------- confirmation ---------- */
+  .scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 26px;
+    z-index: 50;
+  }
+  .scrim.on { display: flex; }
+  .sheet {
+    width: 100%;
+    max-width: 330px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 22px 18px;
+  }
+  .sheet p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .sheet .row2 {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .sheet button {
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+    cursor: pointer;
+  }
+  .sheet button.go { background: var(--link); border-color: var(--link); color: var(--bg); }
+  .sheet button:hover { border-color: var(--link); }
+
+  .back {
+    margin: 0 0 26px;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <section class="now" id="now">
+    <p class="brand">Antisocial Media</p>
+    <h1 id="title">&nbsp;</h1>
+
+    <div class="offer" id="offer">
+      <p>Each week, you can click one item to replace it with a sight-unseen challenge.</p>
+      <button type="button" id="nosnap">Don&rsquo;t swap any</button>
+    </div>
+
+    <div class="list" id="list"></div>
+
+    <div class="foot">
+      <div class="when" id="when"></div>
+      <div class="acts" id="acts">
+        <button type="button" id="showpast">Past week &raquo;</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="past" id="past">
+    <button type="button" class="back" id="back">&laquo; This week</button>
+    <div id="pastlist"></div>
+  </section>
+
+  <section class="hold" id="hold">
+    <p class="brand">Antisocial Media</p>
+    <h1>The first set of challenges lands Monday.</h1>
+    <p class="holdwhen" id="holdwhen"></p>
+  </section>
+
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="asktext">
+    <p id="asktext"></p>
+    <div class="row2">
+      <button type="button" id="asknope">Cancel</button>
+      <button type="button" class="go" id="askyes">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script src="prompts.js"></script>
+<script>
+// ============================================================
+// ANTISOCIAL MEDIA -- weekly challenges
+//
+// Seven a week, the same seven for everybody, renewing at local
+// midnight on Monday. An eighth is drawn and held back: that is
+// the blind swap. Four color schemes rotate, one per week.
+//
+// Nothing is fetched and nothing is sent. Progress lives in this
+// browser's localStorage, one record per week.
+//
+// The list lives in prompts.js and is edited with editor.html.
+// ============================================================
+var SHOWN = 7;      // how many you see
+var DRAWN = 8;      // how many are drawn -- the last one is the spare
+var SCHEMES = 4;
+var EPOCH_WEEK = 2960;   // week of Mon Sep 21 2026 == scheme 0 (rust)
+var FIRST_WEEK = 2960;   // nothing is shown before this week opens
+var LAUNCH_MIN = 1;      // ...and not until one minute past midnight
+
+// Challenges that must appear in a given week, whatever the shuffle deals.
+// Each one takes the last of the seven, in order. A week not listed here is
+// left entirely to the draw.
+var PINS = {
+  2960: ["Make a \"memory box\" out of a coffee can, small cardboard box, or container. Decorate it. Write something you did last week, fold it up and add it. Write something you did today, fold it up and add it. Put it somewhere where you remember to add to it."]
+};
+
+var SOURCE = (typeof window.PROMPT_SOURCE === "string") ? window.PROMPT_SOURCE : "";
+var PROMPTS = SOURCE
+  .split("\n")
+  .map(function (s) { return s.trim(); })
+  .filter(function (s) { return s.length > 0 && s.charAt(0) !== "#"; });
+
+// ---------- text ----------
+// *one asterisk* is italic, **two** is bold, [words](url) is an inline link.
+// A bare URL at the END of the line becomes the MORE button on the right of
+// the sentence. Everything else is escaped plain text.
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function splitLink(s) {
+  var text = String(s), url = "";
+  var tail = text.match(/(^|[^(])\s(https?:\/\/[^\s)]+)\s*$/);
+  if (tail) {
+    url = tail[2];
+    text = text.slice(0, text.lastIndexOf(url)).replace(/\s+$/, "");
+  }
+  return { text: text.replace(/\s+/g, " ").trim(), url: url };
+}
+// **bold** before *italic*, or the single-asterisk pass eats the pairs.
+function render(s) {
+  var p = splitLink(s);
+  var html = esc(p.text)
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a class="inl" href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  if (p.url) {
+    html += '<a class="lnk" href="' + esc(p.url) + '" target="_blank" rel="noopener noreferrer">More &raquo;</a>';
+  }
+  return html;
+}
+
+// ---------- weeks ----------
+// Day 0 of the epoch was a Thursday, so +3 puts the boundary on Monday.
+function weekIndex(d) {
+  var days = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+  return Math.floor((days + 3) / 7);
+}
+function mondayOf(w) {
+  var u = new Date((w * 7 - 3) * 86400000);
+  return new Date(u.getUTCFullYear(), u.getUTCMonth(), u.getUTCDate());
+}
+var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function spanOf(w) {
+  var a = mondayOf(w);
+  var b = new Date(a.getFullYear(), a.getMonth(), a.getDate() + 6);
+  var left = MON[a.getMonth()] + " " + a.getDate();
+  var right = (a.getMonth() === b.getMonth() ? "" : MON[b.getMonth()] + " ") + b.getDate();
+  if (a.getFullYear() !== b.getFullYear()) {
+    return left + ", " + a.getFullYear() + "–" + right + ", " + b.getFullYear();
+  }
+  return left + "–" + right + ", " + b.getFullYear();
+}
+function schemeOf(w) {
+  return ((w - EPOCH_WEEK) % SCHEMES + SCHEMES) % SCHEMES;
+}
+function countdown(from, w) {
+  var ms = mondayOf(w + 1) - from;
+  if (ms <= 0) return "New set is up";
+  var days = Math.floor(ms / 86400000);
+  var hrs = Math.floor(ms / 3600000);
+  if (days >= 1) return "Next set in <b>" + days + "</b> " + (days === 1 ? "day" : "days");
+  if (hrs >= 1) return "Next set in <b>" + hrs + "</b> " + (hrs === 1 ? "hour" : "hours");
+  return "Next set within the hour";
+}
+
+// ---------- the draw ----------
+// A whole-list shuffle per cycle, walked eight at a time, so nothing
+// repeats until the list has been used up, then the deck reshuffles.
+function rngFrom(seed) {
+  var s = seed >>> 0;
+  if (!s) s = 0x9e3779b9;
+  return function () {
+    s ^= (s << 13); s >>>= 0;
+    s ^= (s >>> 17);
+    s ^= (s << 5); s >>>= 0;
+    return s / 4294967296;
+  };
+}
+function drawWeek(w) {
+  if (!PROMPTS.length) return [];
+  var blocks = Math.max(1, Math.floor(PROMPTS.length / DRAWN));
+  var cycle = Math.floor(w / blocks);
+  var slot = w - cycle * blocks;
+  var r = rngFrom((cycle + 1) * 2654435761);
+  r(); r(); r();
+  var pool = PROMPTS.slice();
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(r() * (i + 1));
+    var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+  }
+  var take = pool.slice(slot * DRAWN, slot * DRAWN + DRAWN);
+  while (take.length < DRAWN && pool.length) take.push(pool[take.length % pool.length]);
+
+  // a pinned challenge displaces the last of the seven, unless the shuffle
+  // had already dealt it
+  var pins = PINS[w] || [];
+  for (var k = 0; k < pins.length && k < SHOWN; k++) {
+    if (take.indexOf(pins[k]) !== -1) continue;
+    take[SHOWN - 1 - k] = pins[k];
+  }
+  return take;
+}
+
+// ---------- storage ----------
+var KEY = "am1.week.", IDX = "am1.weeks";   // bumped to drop pre-launch test records
+function readJSON(k, fallback) {
+  try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fallback; }
+  catch (e) { return fallback; }
+}
+function writeJSON(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function noteWeek(w) {
+  var list = readJSON(IDX, []);
+  if (list.indexOf(w) === -1) {
+    list.push(w);
+    list.sort(function (a, b) { return a - b; });
+    writeJSON(IDX, list);
+  }
+}
+function loadWeek(w) { return readJSON(KEY + w, null); }
+function saveWeek(r) {
+  if (PREVIEW) return;            // a look ahead leaves no trace
+  writeJSON(KEY + r.w, r);
+  noteWeek(r.w);
+}
+
+// The record is written the first time a week is opened, and the TEXTS are
+// stored -- so editing prompts.js later never rewrites what somebody did.
+// PREVIEW is the exception: it always draws fresh off the current list and
+// saves nothing, or an early look would freeze a week against an old list.
+function freshRecord(w) {
+  var pool = drawWeek(w);
+  var r = { w: w, items: pool.slice(0, SHOWN), spare: pool[SHOWN] || pool[0] || "",
+            used: false, locked: false, checked: [] };
+  for (var i = 0; i < SHOWN; i++) r.checked.push(false);
+  return r;
+}
+function weekRecord(w) {
+  if (PREVIEW) return freshRecord(w);
+  var r = loadWeek(w);
+  if (r && r.items && r.items.length === SHOWN) return r;
+  r = freshRecord(w);
+  saveWeek(r);
+  return r;
+}
+
+// ---------- preview hooks: ?w=+1 jumps a week, ?scheme=0..3 forces a palette
+function qnum(name) {
+  var m = new RegExp("[?&]" + name + "=([^&]+)").exec(window.location.search);
+  return m ? parseInt(decodeURIComponent(m[1]), 10) : null;
+}
+
+var listEl = document.getElementById("list");
+var titleEl = document.getElementById("title");
+var whenEl = document.getElementById("when");
+var actsEl = document.getElementById("acts");
+var nowSec = document.getElementById("now");
+var pastSec = document.getElementById("past");
+var pastList = document.getElementById("pastlist");
+
+var today = new Date();
+var PREVIEW = qnum("w") !== null || qnum("scheme") !== null;
+var W = weekIndex(today) + (qnum("w") || 0);
+var rec = weekRecord(W);
+
+var forced = qnum("scheme");
+var scheme = (forced === null || isNaN(forced)) ? schemeOf(W) : ((forced % SCHEMES) + SCHEMES) % SCHEMES;
+document.documentElement.setAttribute("data-scheme", String(scheme));
+(function () {
+  var bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  if (bg) document.getElementById("themecolor").setAttribute("content", bg);
+})();
+
+// ---------- the list ----------
+function buildRow(i, r, live, landed) {
+  var row = document.createElement("div");
+  row.className = "row" + (r.checked[i] ? " done" : "") + (landed ? " landed" : "");
+
+  // while the swap offer is open the dot is not a checkbox -- the whole row,
+  // dot included, is the thing you are picking
+  var arming = live && !settled();
+  var dot = document.createElement(live && !arming ? "button" : "span");
+  dot.className = "dot";
+  if (live && !arming) {
+    dot.type = "button";
+    dot.setAttribute("aria-pressed", r.checked[i] ? "true" : "false");
+    dot.setAttribute("aria-label", r.checked[i] ? "Mark as not done" : "Mark as done");
+    dot.addEventListener("click", function (e) {
+      e.stopPropagation();
+      r.checked[i] = !r.checked[i];
+      saveWeek(r);
+      row.classList.toggle("done", r.checked[i]);
+      dot.setAttribute("aria-pressed", r.checked[i] ? "true" : "false");
+    });
+  }
+
+  var txt = document.createElement("div");
+  txt.className = "txt";
+  txt.innerHTML = render(r.items[i]);
+
+  row.appendChild(dot);
+  row.appendChild(txt);
+
+  if (live) {
+    row.addEventListener("click", function (e) {
+      if (settled()) return;                                   // offer is over
+      if (e.target.closest && e.target.closest("a")) return;    // let links be links
+      offerSwap(i);
+    });
+  }
+  return row;
+}
+
+function paint(landedIndex) {
+  listEl.innerHTML = "";
+  for (var i = 0; i < SHOWN; i++) listEl.appendChild(buildRow(i, rec, true, i === landedIndex));
+}
+
+// ---------- the one blind swap ----------
+// The offer stands from the moment a week opens until it is settled: either
+// one row gets replaced by the held-back eighth, or the week is locked as
+// dealt. Settled either way, the offer and the button go for good, and the
+// dots go back to being checkboxes.
+var offerEl = document.getElementById("offer");
+
+function settled() { return rec.used || rec.locked; }
+
+function showOffer() {
+  var open = !settled();
+  offerEl.classList.toggle("on", open);
+  document.body.classList.toggle("has-offer", open);
+  document.body.classList.toggle("arm", open);
+}
+
+function footer() {
+  actsEl.innerHTML = "";
+  var past = document.createElement("button");
+  past.type = "button";
+  past.textContent = "Past week »";
+  past.addEventListener("click", showPast);
+  actsEl.appendChild(past);
+}
+
+// ---------- confirmation sheet ----------
+var scrim = document.getElementById("scrim");
+var askText = document.getElementById("asktext");
+var askYes = document.getElementById("askyes");
+var askNope = document.getElementById("asknope");
+var onYes = null;
+
+function ask(message, yesLabel, then) {
+  askText.textContent = message;
+  askYes.textContent = yesLabel;
+  onYes = then;
+  scrim.classList.add("on");
+  askYes.focus();
+}
+function closeAsk() {
+  scrim.classList.remove("on");
+  onYes = null;
+}
+askYes.addEventListener("click", function () {
+  var go = onYes;
+  closeAsk();
+  if (go) go();
+});
+askNope.addEventListener("click", closeAsk);
+scrim.addEventListener("click", function (e) { if (e.target === scrim) closeAsk(); });
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && scrim.classList.contains("on")) closeAsk();
+});
+
+function offerSwap(i) {
+  if (settled()) return;
+  ask("Swap this one for a challenge you haven’t seen?", "Swap it", function () {
+    rec.items[i] = rec.spare;
+    rec.checked[i] = false;
+    rec.used = true;
+    saveWeek(rec);
+    showOffer();
+    paint(i);
+  });
+}
+
+document.getElementById("nosnap").addEventListener("click", function () {
+  if (settled()) return;
+  ask("Lock in this week’s list.", "Lock it in", function () {
+    rec.locked = true;
+    saveWeek(rec);
+    showOffer();
+    paint(-1);
+  });
+});
+
+// ---------- past weeks ----------
+function showPast() {
+  pastList.innerHTML = "";
+  var weeks = readJSON(IDX, []).filter(function (w) { return w < W; }).sort(function (a, b) { return b - a; });
+  if (!weeks.length) {
+    var p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "Nothing behind you yet. This is your first week.";
+    pastList.appendChild(p);
+  }
+  weeks.forEach(function (w) {
+    var r = loadWeek(w);
+    if (!r || !r.items) return;
+    var n = 0;
+    for (var k = 0; k < r.checked.length; k++) if (r.checked[k]) n++;
+
+    var box = document.createElement("section");
+    box.className = "wk";
+    var h = document.createElement("h2");
+    h.textContent = spanOf(w) + " Challenges";
+    var s = document.createElement("p");
+    s.className = "score";
+    s.textContent = n + " of " + r.items.length + " done" + (r.used ? " · swapped one" : "");
+    var ul = document.createElement("div");
+    ul.className = "list";
+    for (var i = 0; i < r.items.length; i++) ul.appendChild(buildRow(i, r, false, false));
+
+    box.appendChild(h);
+    box.appendChild(s);
+    box.appendChild(ul);
+    pastList.appendChild(box);
+  });
+  arm(false);
+  nowSec.classList.add("off");
+  pastSec.classList.add("on");
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("back").addEventListener("click", function () {
+  pastSec.classList.remove("on");
+  nowSec.classList.remove("off");
+  window.scrollTo(0, 0);
+});
+
+// ---------- before launch ----------
+// Nothing is on offer until the first week opens, one minute past midnight
+// on its Monday. A preview link walks straight past this.
+function launchAt() {
+  return mondayOf(FIRST_WEEK).getTime() + LAUNCH_MIN * 60000;
+}
+function holding(at) { return !PREVIEW && at.getTime() < launchAt(); }
+
+function showHold() {
+  var hold = document.getElementById("hold");
+  document.getElementById("now").classList.add("off");
+  hold.classList.add("on");
+  var tick = function () {
+    var ms = launchAt() - Date.now();
+    if (ms <= 0) { window.location.reload(); return; }
+    var d = Math.floor(ms / 86400000);
+    var h = Math.floor((ms % 86400000) / 3600000);
+    var m = Math.floor((ms % 3600000) / 60000);
+    document.getElementById("holdwhen").textContent =
+      "Opens in " + (d ? d + "d " : "") + (d || h ? h + "h " : "") + m + "m";
+    setTimeout(tick, 15000);
+  };
+  tick();
+}
+
+// ---------- go ----------
+if (holding(today)) {
+  showHold();
+} else {
+titleEl.textContent = spanOf(W) + " Challenges";
+whenEl.innerHTML = countdown(today, W);
+showOffer();
+paint(-1);
+footer();
+}
+
+// a tab left open over the Monday boundary picks up the new set
+window.addEventListener("focus", function () {
+  if (weekIndex(new Date()) + (qnum("w") || 0) !== W) window.location.reload();
+});
+</script>
+
+</body>
+</html>
