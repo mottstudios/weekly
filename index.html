@@ -181,7 +181,13 @@
     color: var(--link);
     cursor: pointer;
   }
-  .foot button:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .foot a {
+    font: inherit;
+    color: var(--link);
+    text-decoration: none;
+  }
+  .foot button:hover,
+  .foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
   .foot button.off { visibility: hidden; }
   .foot .note { color: var(--ink); opacity: 0.85; }
   .foot .note button { color: var(--link); margin-left: 10px; }
@@ -317,6 +323,7 @@
     <p class="brand">Antisocial Media</p>
     <h1>The first set of challenges lands Monday.</h1>
     <p class="holdwhen" id="holdwhen"></p>
+    <p class="foot"><a href="about.html">About this</a></p>
   </section>
 
 </div>
@@ -604,6 +611,11 @@ function footer() {
   past.textContent = "Past week »";
   past.addEventListener("click", showPast);
   actsEl.appendChild(past);
+
+  var about = document.createElement("a");
+  about.href = "about.html";
+  about.textContent = "About this";
+  actsEl.appendChild(about);
 }
 
 // ---------- confirmation sheet ----------
@@ -689,7 +701,7 @@ function showPast() {
     box.appendChild(ul);
     pastList.appendChild(box);
   });
-  arm(false);
+  document.body.classList.remove("arm");
   nowSec.classList.add("off");
   pastSec.classList.add("on");
   window.scrollTo(0, 0);
@@ -698,6 +710,7 @@ function showPast() {
 document.getElementById("back").addEventListener("click", function () {
   pastSec.classList.remove("on");
   nowSec.classList.remove("off");
+  showOffer();
   window.scrollTo(0, 0);
 });
 

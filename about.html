@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" id="themecolor" content="#C44100">
+<title>About — Antisocial Media</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  /* Same four color schemes as the main page. */
+  :root {
+    color-scheme: dark;
+    --bg:     #C44100;
+    --rule:   #FF9100;
+    --link:   #FFBA23;
+    --ink:    #FFFFFF;
+    --label: 11px;
+  }
+  html[data-scheme="1"] { --bg:#004D8B; --rule:#008DEC; --link:#0DCCFF; }
+  html[data-scheme="2"] { --bg:#375E00; --rule:#79B700; --link:#B5FF00; }
+  html[data-scheme="3"] { --bg:#4F2100; --rule:#9B3E00; --link:#FF6700; }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); }
+  body {
+    color: var(--ink);
+    font-family: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.35;
+    -webkit-font-smoothing: antialiased;
+    padding: calc(22px + env(safe-area-inset-top)) 26px calc(40px + env(safe-area-inset-bottom));
+  }
+  .wrap { width: 100%; max-width: 430px; margin: 0 auto; }
+
+  .brand {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--rule);
+  }
+  h1 {
+    margin: 9px 0 0;
+    font-size: clamp(21px, 6.4vw, 25px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.012em;
+  }
+  .lede {
+    margin: 16px 0 0;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  /* Q&A -- hairlines edge to edge, same as the list of seven. */
+  .qa {
+    margin: 38px -26px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .qa section {
+    padding: 18px 26px 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .qa h2 {
+    margin: 0;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--rule);
+  }
+  .qa p {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .qa p + p { margin-top: 11px; }
+  .qa em { font-style: italic; }
+  .qa strong { font-weight: 600; }
+  .qa a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  .nav {
+    display: block;
+    margin: 0 0 26px;
+    font-size: var(--label);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--link);
+    text-decoration: none;
+  }
+  .nav:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .foot { margin: 26px 0 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="nav" href="index.html">&laquo; This week</a>
+
+  <p class="brand">Antisocial Media</p>
+  <h1>What is this?</h1>
+  <p class="lede">Seven weekly prompts. They're all simple: take a photo, go for a walk, call someone, read a poem ... stuff like that. Stuff you probably already do.</p>
+  <div class="qa">
+
+    <section>
+      <h2>Do I have to do all seven</h2>
+      <p>No. Nothing counts anything. If you don't want to do one of the seven prompts, you can swap it. If there are others you don't want to do, ignore them. "Roll your own" and write them down somewhere.</p>
+    </section>
+
+    <section>
+      <h2>How do I do them</h2>
+      <p>Just do them. Or not. That's it.</p>
+    </section>
+
+    <section>
+      <h2>What's the catch</h2>
+      <p>There isn't one.</p>
+    </section>
+
+    <section>
+      <h2>What's it for</h2>
+      <p>For fun.</p>
+    </section>
+
+    <section>
+      <h2>When do I need to do them</h2>
+      <p>Do them at your leisure. If you check back on a Monday, a new set will be available. It's up to you to remember to check. The previous weeks will remain available, so if you want to go back and do or re-do earlier prompts, you can.</p>
+    </section>
+
+    <section>
+      <h2>Privacy and data info</h2>
+      <p>There are no accounts, analytics, cookies, or server. Nothing you do here is sent anywhere because there is nowhere for it to go.</p>
+	  <p>The ones you check off are written into your own browser’s storage on whatever device you're using. Nobody else sees it.</p>
+	  <p>Because your dots live in your the browser, they don't follow you. A different browser, device, or clearing your site data will clear them.</p>
+    </section>
+
+    <section>
+      <h2>Tip</h2>
+      <p>Bookmark the link or save it as a shortcut.</p>
+    </section>
+
+    <section>
+      <h2>One of the links is dead</h2>
+      <p>If that happens, make up something else to do instead.</p>
+    </section>
+
+  </div>
+
+  <p class="foot"><a class="nav" href="index.html">&laquo; This week</a></p>
+
+</div>
+
+<script>
+// Match the main page's scheme for this week.
+(function () {
+  var SCHEMES = 4, EPOCH_WEEK = 2960;
+  function weekIndex(d) {
+    var days = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+    return Math.floor((days + 3) / 7);
+  }
+  function qnum(name) {
+    var m = new RegExp("[?&]" + name + "=([^&]+)").exec(window.location.search);
+    return m ? parseInt(decodeURIComponent(m[1]), 10) : null;
+  }
+  var forced = qnum("scheme");
+  var w = weekIndex(new Date()) + (qnum("w") || 0);
+  var scheme = (forced === null || isNaN(forced))
+    ? ((w - EPOCH_WEEK) % SCHEMES + SCHEMES) % SCHEMES
+    : ((forced % SCHEMES) + SCHEMES) % SCHEMES;
+  document.documentElement.setAttribute("data-scheme", String(scheme));
+  var bg = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+  if (bg) document.getElementById("themecolor").setAttribute("content", bg);
+})();
+</script>
+
+</body>
+</html>
