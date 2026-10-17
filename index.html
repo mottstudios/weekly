@@ -617,10 +617,17 @@ function footer() {
   past.addEventListener("click", showPast);
   actsEl.appendChild(past);
 
+  var right = document.createElement("span");
+  var remind = document.createElement("a");
+  remind.href = "about.html#remind";
+  remind.textContent = "Remind myself";
   var about = document.createElement("a");
   about.href = "about.html";
   about.textContent = "About this";
-  actsEl.appendChild(about);
+  right.appendChild(remind);
+  right.appendChild(document.createTextNode(" • "));
+  right.appendChild(about);
+  actsEl.appendChild(right);
 }
 
 // ---------- confirmation sheet ----------
