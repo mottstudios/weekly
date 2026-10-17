@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Antisocial Media//Weekly reminder//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:weekly-reminder@antisocial-media
+DTSTAMP:20261017T000000Z
+DTSTART:20261019T090000
+DTEND:20261019T091500
+RRULE:FREQ=WEEKLY;BYDAY=MO
+SUMMARY:Antisocial Media: new challenges
+DESCRIPTION:This week's seven are up. https://mottstudios.github.io/weekly/
+URL:https://mottstudios.github.io/weekly/
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Antisocial Media: new challenges
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
