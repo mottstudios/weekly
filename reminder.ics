@@ -9,13 +9,14 @@ DTSTAMP:20261017T000000Z
 DTSTART:20261019T090000
 DTEND:20261019T091500
 RRULE:FREQ=WEEKLY;BYDAY=MO
-SUMMARY:Antisocial Media: new challenges
-DESCRIPTION:This week's seven are up. https://mottstudios.github.io/weekly/
+SUMMARY:New Weekly Prompts • Antisocial Media
+DESCRIPTION:This week's prompts are up.\nhttps://mottstudios.github.io/weekly/
+X-ALT-DESC;FMTTYPE=text/html:<html><body><a href="https://mottstudios.github.io/weekly/">This week's prompts are up.</a></body></html>
 URL:https://mottstudios.github.io/weekly/
 TRANSP:TRANSPARENT
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Antisocial Media: new challenges
+DESCRIPTION:New Weekly Prompts • Antisocial Media
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
